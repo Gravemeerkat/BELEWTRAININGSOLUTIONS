@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/module_button.dart';
+import 'straight_line_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -41,7 +42,12 @@ class HomeScreen extends StatelessWidget {
                     title: "Straight Line",
                     icon: Icons.straight,
                     color: Colors.blue.shade400,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => StraightLineScreen()),
+                      );
+                    },
                   ),
                   ModuleButton(
                     title: "Offset Left",
