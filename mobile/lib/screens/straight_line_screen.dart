@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/voice_service.dart';
 
 class StraightLineScreen extends StatefulWidget {
   @override
@@ -7,6 +8,8 @@ class StraightLineScreen extends StatefulWidget {
 
 class _StraightLineScreenState extends State<StraightLineScreen> {
   int _currentStep = 0;
+  bool _isListening = false;
+  late VoiceService _voiceService;
 
   final List<String> steps = [
     "Position the truck centered within the lane.",
@@ -15,6 +18,43 @@ class _StraightLineScreenState extends State<StraightLineScreen> {
     "Make micro-corrections using mirrors only.",
     "Stop when trailer reaches the target cones.",
   ];
+
+  final List<String> voiceInstructions = [
+    "Step 1: Position the truck centered within the lane. Ensure your truck is straight before you start backing.",
+    "Step 2: Check mirrors to confirm trailer alignment. Look at both side mirrors and your center mirror.",
+    "Step 3: Begin backing slowly while holding the wheel steady. Never exceed 5 miles per hour.",
+    "Step 4: Make micro-corrections using mirrors only. Use small steering inputs to keep the trailer straight.",
+    "Step 5: Stop when trailer reaches the target cones. You have successfully completed straight line backing.",
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _voiceService = VoiceService();
+  }
+
+  @override
+  void dispose() {
+    _voiceService.dispose();
+    super.dispose();
+  }
+
+  void _playVoiceInstruction() async {
+    setState(() {
+      _isListening = true;
+    });
+    await _voiceService.speak(voiceInstructions[_currentStep]);
+    setState(() {
+      _isListening = false;
+    });
+  }
+
+  void _stopVoice() async {
+    await _voiceService.stop();
+    setState(() {
+      _isListening = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +82,12 @@ class _StraightLineScreenState extends State<StraightLineScreen> {
             decoration: BoxDecoration(
               color: Color(0xFFEFF3F7),
               borderRadius: BorderRadius.circular(18),
-              image: DecorationImage(
-                image: AssetImage("assets/images/straight_line_mock.png"),
-                fit: BoxFit.cover,
-                opacity: 0.9,
+            ),
+            child: Center(
+              child: Icon(
+                Icons.local_shipping,
+                size: 100,
+                color: Colors.blueAccent,
               ),
             ),
           ),
@@ -121,13 +163,38 @@ class _StraightLineScreenState extends State<StraightLineScreen> {
 
                   Spacer(),
 
+                  // --- VOICE BUTTON ---
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(bottom: 16),
+                    child: ElevatedButton.icon(
+                      onPressed: _isListening ? _stopVoice : _playVoiceInstruction,
+                      icon: Icon(_isListening ? Icons.stop : Icons.volume_up),
+                      label: Text(
+                        _isListening ? "Stop Audio" : "Listen to Instructions",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        backgroundColor: _isListening
+                            ? Colors.red.shade400
+                            : Colors.blueAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                    ),
+                  ),
+
                   // --- BUTTONS ---
                   Row(
                     children: [
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () {
-                            // AI Guide Popup
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
