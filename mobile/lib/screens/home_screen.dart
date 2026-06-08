@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import '../widgets/module_button.dart';
 import 'straight_line_screen.dart';
+import 'offset_left_screen.dart';
+import 'offset_right_screen.dart';
+import 'parallel_parking_screen.dart';
+import 'alley_dock_screen.dart';
+import 'general_backing_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -53,31 +58,56 @@ class HomeScreen extends StatelessWidget {
                     title: "Offset Left",
                     icon: Icons.turn_left,
                     color: Colors.orange.shade400,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => OffsetLeftScreen()),
+                      );
+                    },
                   ),
                   ModuleButton(
                     title: "Offset Right",
                     icon: Icons.turn_right,
                     color: Colors.green.shade400,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => OffsetRightScreen()),
+                      );
+                    },
                   ),
                   ModuleButton(
                     title: "Parallel",
                     icon: Icons.align_horizontal_center,
                     color: Colors.purple.shade400,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ParallelParkingScreen()),
+                      );
+                    },
                   ),
                   ModuleButton(
                     title: "Alley Dock",
                     icon: Icons.local_shipping_outlined,
                     color: Colors.red.shade400,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => AlleyDockScreen()),
+                      );
+                    },
                   ),
                   ModuleButton(
                     title: "General Backing",
                     icon: Icons.school_outlined,
                     color: Colors.teal.shade400,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => GeneralBackingScreen()),
+                      );
+                    },
                   ),
                 ],
               ),
